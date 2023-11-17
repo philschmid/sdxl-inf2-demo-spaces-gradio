@@ -1,7 +1,7 @@
 import os
 
 # To use two neuron core per worker
-os.environ["NEURON_RT_NUM_CORES"] = "2"
+os.environ["NEURON_RT_NUM_CORES"] = "1"
 import torch
 import torch_neuronx
 import base64
@@ -11,9 +11,7 @@ from optimum.neuron import NeuronStableDiffusionXLPipeline
 
 def model_fn(model_dir):
     # load local converted model into pipeline
-    pipeline = NeuronStableDiffusionXLPipeline.from_pretrained(
-        model_dir, device_ids=[0, 1]
-    )
+    pipeline = NeuronStableDiffusionXLPipeline.from_pretrained(model_dir)
     return pipeline
 
 
