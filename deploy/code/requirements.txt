@@ -1,1 +1,1 @@
-optimum-neuron[diffusers]==0.0.14
+optimum-neuron[diffusers]==0.0.15

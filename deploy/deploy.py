@@ -39,42 +39,42 @@ assert sess.boto_region_name in [
 ], "region must be us-east-2 or us-west-2, due to instance availability"
 
 
-# # Downloads our compiled model from the HuggingFace Hub
-# # using the revision as neuron version reference
-# # and makes sure we exlcude the symlink files and "hidden" files, like .DS_Store, .gitignore, etc.
-# snapshot_download(
-#     compiled_model_id,
-#     # revision="2.15.0",
-#     revision="main",
-#     local_dir=save_directory,
-#     local_dir_use_symlinks=False,
-#     allow_patterns=["[!.]*.*"],
-# )
-# copy_tree("code/", f"{save_directory}/code/")
+# Downloads our compiled model from the HuggingFace Hub
+# using the revision as neuron version reference
+# and makes sure we exlcude the symlink files and "hidden" files, like .DS_Store, .gitignore, etc.
+snapshot_download(
+    compiled_model_id,
+    # revision="2.15.0",
+    revision="main",
+    local_dir=save_directory,
+    local_dir_use_symlinks=False,
+    allow_patterns=["[!.]*.*"],
+)
+copy_tree("code/", f"{save_directory}/code/")
 
 
-# # Create model.tar.gz
-# def compress(tar_dir=None, output_file="model.tar.gz"):
-#     parent_dir = os.getcwd()
-#     os.chdir(tar_dir)
-#     with tarfile.open(os.path.join(parent_dir, output_file), "w:gz") as tar:
-#         for root, dirs, files in os.walk("."):
-#             for file in files:
-#                 file_path = str(os.path.join(root, file)).replace("./", "")
-#                 print(file_path)
-#                 tar.add(file_path, arcname=file_path)
-#     os.chdir(parent_dir)
+# Create model.tar.gz
+def compress(tar_dir=None, output_file="model.tar.gz"):
+    parent_dir = os.getcwd()
+    os.chdir(tar_dir)
+    with tarfile.open(os.path.join(parent_dir, output_file), "w:gz") as tar:
+        for root, dirs, files in os.walk("."):
+            for file in files:
+                file_path = str(os.path.join(root, file)).replace("./", "")
+                print(file_path)
+                tar.add(file_path, arcname=file_path)
+    os.chdir(parent_dir)
 
 
-# compress(save_directory)
+compress(save_directory)
 
-# # create s3 uri
-# s3_model_path = f"s3://{sess.default_bucket()}/neuronx/lcm"
+# create s3 uri
+s3_model_path = f"s3://{sess.default_bucket()}/neuronx/lcm"
 
-# # upload model.tar.gz
-# s3_model_uri = S3Uploader.upload(
-#     local_path="model.tar.gz", desired_s3_uri=s3_model_path
-# )
+# upload model.tar.gz
+s3_model_uri = S3Uploader.upload(
+    local_path="model.tar.gz", desired_s3_uri=s3_model_path
+)
 s3_model_uri = "s3://sagemaker-us-east-2-558105141721/neuronx/lcm/model.tar.gz"
 print(f"model artifcats uploaded to {s3_model_uri}")
 

@@ -1,7 +1,7 @@
 import os
 
 # To use two neuron core per worker
-os.environ["NEURON_RT_NUM_CORES"] = "1"
+os.environ["NEURON_RT_NUM_CORES"] = "2"
 import torch
 import torch_neuronx
 import base64
@@ -18,13 +18,15 @@ def model_fn(model_dir):
 def predict_fn(data, pipeline):
     # extract prompt from data
     prompt = data.pop("inputs", data)
+    prompts = [prompt] * 2 # two neuron core per worker
+
 
     parameters = data.pop("parameters", None)
 
     if parameters is not None:
-        generated_images = pipeline(prompt, **parameters)["images"]
+        generated_images = pipeline(prompts, **parameters)["images"]
     else:
-        generated_images = pipeline(prompt)["images"]
+        generated_images = pipeline(prompts)["images"]
 
     # postprocess convert image into base64 string
     encoded_images = []
