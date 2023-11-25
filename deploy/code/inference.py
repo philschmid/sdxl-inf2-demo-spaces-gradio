@@ -1,7 +1,3 @@
-import os
-
-# To use two neuron core per worker
-os.environ["NEURON_RT_NUM_CORES"] = "2"
 import torch
 import torch_neuronx
 import base64
