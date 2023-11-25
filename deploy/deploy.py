@@ -75,7 +75,6 @@ s3_model_path = f"s3://{sess.default_bucket()}/neuronx/lcm"
 s3_model_uri = S3Uploader.upload(
     local_path="model.tar.gz", desired_s3_uri=s3_model_path
 )
-s3_model_uri = "s3://sagemaker-us-east-2-558105141721/neuronx/lcm/model.tar.gz"
 print(f"model artifcats uploaded to {s3_model_uri}")
 
 # create Hugging Face Model Class
