@@ -97,5 +97,15 @@ predictor = huggingface_model.deploy(
 # ignore the "Your model is not compiled. Please compile your model before using Inferentia." warning, we already compiled our model.
 print("Endpoint deployed")
 print("Endpoint name: ", predictor.endpoint_name)
+print("Testing endpoint")
 # print("delete temp code repository")
 # shutil.rmtree(save_directory)
+predictor.predict({
+        "inputs": "A serious capybara at work, wearing a suit",
+        "parameters": {
+            "guidance_scale": 8.0,
+            "num_inference_steps": 8,
+        }
+        }
+)
+print("Endpoint test successful")
